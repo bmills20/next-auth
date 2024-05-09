@@ -1,0 +1,97 @@
+# Cosmos DB Adapter
+
+<img align="right" src="/img/adapters/cosmosdb.svg" width="64" height="64" />
+
+## Resources
+
+- [Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/)
+
+## Setup
+
+### Installation
+
+```bash npm2yarn
+npm install @auth/cosmosdb-adapter
+```
+
+### Environment Variables
+
+```
+AUTH_COSMOS_ENDPOINT=storageaccountname
+AUTH_COSMOS_KEY=longRandomKey
+AUTH_COSMOS_DATABASE=https://$AZURE_ACCOUNT.table.core.windows.net
+```
+
+
+### Configuration
+1. Create the necessary containers for authentication data in your Cosmos DB database. The example below uses the following container names:
+   - `users`
+   - `accounts`
+   - `sessions`
+   - `verification_tokens`
+
+<Code>
+<Code.Next>
+```ts filename="./auth.ts"
+import NextAuth, { type AuthConfig } from "next-auth";
+import { CosmosAdapter } from "@auth/cosmos-adapter";
+import { CosmosClient } from "@azure/cosmos";
+
+const cosmosClient = new CosmosClient({
+  endpoint: process.env.AUTH_COSMOS_ENDPOINT,
+  key: process.env.AUTH_COSMOS_KEY,
+});
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [],
+  adapter: CosmosAdapter(cosmosClient, process.env.AUTH_COSMOS_DATABASE),
+} satisfies AuthConfig);
+```
+</Code.Next>
+
+<Code.Svelte>
+```ts filename="./src/auth.ts"
+import SvelteKitAuth, { type AuthConfig } from "@auth/sveltekit";
+import { CosmosAdapter } from "@auth/cosmos-adapter";
+import { CosmosClient } from "@azure/cosmos";
+
+const cosmosClient = new CosmosClient({
+  endpoint: process.env.AUTH_COSMOS_ENDPOINT,
+  key: process.env.AUTH_COSMOS_KEY,
+});
+
+export const { handle, signIn, signOut } = SvelteKitAuth({
+  providers: [],
+  adapter: CosmosAdapter(cosmosClient, process.env.AUTH_COSMOS_DATABASE),
+} satisfies AuthConfig);
+```
+</Code.Svelte>
+
+<Code.Express>
+```ts filename="./src/routes/auth.route.ts"
+import express from "express";
+import Google from "@auth/express/providers/google";
+import ExpressAuth, { type AuthConfig } from "@auth/express";
+import { CosmosAdapter } from "@auth/cosmos-adapter";
+import { CosmosClient } from "@azure/cosmos";
+
+const app = express();
+
+const cosmosClient = new CosmosClient({
+  endpoint: process.env.AUTH_COSMOS_ENDPOINT,
+  key: process.env.AUTH_COSMOS_KEY,
+});
+
+// If app is served through a proxy, trust the proxy to allow HTTPS protocol to be detected
+app.set("trust proxy", true);
+
+app.use(
+  "/auth/*",
+  ExpressAuth({
+    providers: [Google],
+    adapter: CosmosAdapter(cosmosClient, process.env.AUTH_COSMOS_DATABASE),
+  })
+);
+```
+</Code.Express>
+</Code>

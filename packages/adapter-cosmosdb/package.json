@@ -1,0 +1,53 @@
+{
+  "name": "@repo/cosmos-adapter",
+  "main": "./dist/index.server.js",
+  "baseurl": "./src",
+  "version": "1.0.0",
+  "description": "An Azure Cosmos DB adapter for Auth.js / NextAuth.js",
+  "homepage": "https://authjs.dev",
+  "repository": "https://github.com/nextauthjs/adapters.git",
+  "bugs": {
+    "url": "https://github.com/nextauthjs/adapters/issues"
+  },
+  "author": "Braxton Mills <braxton@repoagent.ai>",
+  "contributors": [
+    "Braxton Mills <braxton@repoagent.ai>",
+    "Jehong Lee <esimileiar81@gmail.com>"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "Auth.js",
+    "azure",
+    "cosmosdb",
+    "cosmos",
+    "adapter"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.server.js"
+  },
+  "files": [
+    "*.d.ts*",
+    "*.ts",
+    "*.js",
+    "src"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "./test/test.sh",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@azure/cosmos": "^3.17.3",
+    "typescript": "^5.4.3"
+  },
+  "packageManager": "pnpm@9.0.5",
+  "dependencies": {
+    "@repo/cryptography": "workspace:*",
+    "@auth/core": "^0.28.2",
+    "@azure/cosmos": "^3.17.3"
+  }
+}
